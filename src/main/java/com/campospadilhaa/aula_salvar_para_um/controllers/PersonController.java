@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.campospadilhaa.aula_salvar_para_um.dto.PersonDepartmentDTO;
+import com.campospadilhaa.aula_salvar_para_um.dto.PersonDTO;
 import com.campospadilhaa.aula_salvar_para_um.services.PersonService;
 
 @RestController
@@ -20,6 +20,7 @@ public class PersonController {
 	@Autowired
 	private PersonService personService;
 
+	/*
 	@PostMapping
 	public ResponseEntity<PersonDepartmentDTO> insert(@RequestBody PersonDepartmentDTO personDepartmentDTO) { // anotation '@Valid' considera as validações definidas no DTO
 
@@ -30,5 +31,17 @@ public class PersonController {
 
 		// ResponseEntity com 'created' retorna o status 201 (created)
 		return ResponseEntity.created(uri).body(personDepartmentDTO);
+	}*/
+
+	@PostMapping
+	public ResponseEntity<PersonDTO> insert(@RequestBody PersonDTO personDTO) { // anotation '@Valid' considera as validações definidas no DTO
+
+		personDTO = personService.insert(personDTO);
+
+		// a criação de uma URI faz com que no header do response conste a URL para a busca do Person
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(personDTO.getId()).toUri();
+
+		// ResponseEntity com 'created' retorna o status 201 (created)
+		return ResponseEntity.created(uri).body(personDTO);
 	}
 }

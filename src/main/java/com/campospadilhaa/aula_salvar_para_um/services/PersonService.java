@@ -3,6 +3,7 @@ package com.campospadilhaa.aula_salvar_para_um.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.campospadilhaa.aula_salvar_para_um.dto.PersonDTO;
 import com.campospadilhaa.aula_salvar_para_um.dto.PersonDepartmentDTO;
 import com.campospadilhaa.aula_salvar_para_um.entities.Department;
 import com.campospadilhaa.aula_salvar_para_um.entities.Person;
@@ -25,9 +26,9 @@ public class PersonService {
 		person.setName(personDepartmentDTO.getName());
 		person.setSalary(personDepartmentDTO.getSalary());
 
-		/* somente para gravar o Department no Person
-		 * Department department = new Department();
-		 * department.setId(personDepartmentDTO.getDepartment().getId());*/
+		/* somente para gravar o Department no Person 
+		Department department = new Department();
+		department.setId(personDepartmentDTO.getDepartment().getId());/**/
 
 		// buscando do banco com o id informado para que no return conste também o Department.name
 		Department department = departmentRepository.getReferenceById(personDepartmentDTO.getDepartment().getId());
@@ -37,5 +38,26 @@ public class PersonService {
 		person = personRepository.save(person);
 
 		return new PersonDepartmentDTO(person);
+	}
+
+	public PersonDTO insert(PersonDTO personDTO) {
+
+		Person person = new Person();
+
+		person.setName(personDTO.getName());
+		person.setSalary(personDTO.getSalary());
+
+		/* somente para gravar o Department no Person 
+		Department department = new Department();
+		department.setId(personDTO.getDepartmentId());/**/
+
+		// buscando do banco com o id informado para que no return conste também o Department.name
+		Department department = departmentRepository.getReferenceById(personDTO.getDepartmentId());
+
+		person.setDepartment(department);
+
+		person = personRepository.save(person);
+
+		return new PersonDTO(person);
 	}
 }
